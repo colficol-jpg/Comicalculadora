@@ -3,59 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ComiOnline - Calculadora de Crédito</title>
-  <link rel="stylesheet" href="public/styles.css">
-  <style>
-    body {
-      background: linear-gradient(135deg, #004d26, #007A33);
-      color: white;
-      font-family: 'Poppins', sans-serif;
-    }
-    .calculadora {
-      background: white;
-      color: #004d26;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      padding: 2rem;
-      max-width: 420px;
-      width: 100%;
-    }
-    .highlight {
-      color: #FF8C00;
-    }
-    input {
-      border: 2px solid #FF8C00;
-      outline: none;
-    }
-    input:focus {
-      border-color: #007A33;
-    }
-  </style>
+  <title>ComiOnline - Simulador de Crédito</title>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
-<body class="flex flex-col md:flex-row items-center justify-center min-h-screen gap-8 p-4">
+<body class="bg-[#004d26] text-white font-[Poppins] flex flex-col md:flex-row items-center justify-center min-h-screen p-6">
 
-  <div class="w-64 hidden md:block">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Example_logo.svg" alt="Comy" class="w-full h-auto rounded-xl shadow-lg"/>
+  <!-- Lado Izquierdo: Contenedor principal -->
+  <div class="bg-white text-[#004d26] rounded-2xl shadow-2xl p-8 max-w-md w-full">
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-extrabold flex items-center justify-center gap-2">
+        <span class="text-[#007A33]">Comi</span><span class="text-[#FF8C00]">Online</span>
+      </h1>
+      <p class="text-sm text-gray-600">Simulador de crédito rápido y fácil</p>
+    </div>
+
+    <form id="calcForm" class="flex flex-col gap-4">
+      <div>
+        <label class="font-semibold text-sm">Monto del préstamo</label>
+        <input id="monto" type="number" placeholder="Ej: 1,000,000" class="w-full p-3 mt-1 rounded-lg border-2 border-[#FF8C00] focus:outline-none focus:border-[#007A33]">
+      </div>
+
+      <div>
+        <label class="font-semibold text-sm">Tasa de interés (% mensual)</label>
+        <input id="interes" type="number" placeholder="Ej: 2" class="w-full p-3 mt-1 rounded-lg border-2 border-[#FF8C00] focus:outline-none focus:border-[#007A33]">
+      </div>
+
+      <div>
+        <label class="font-semibold text-sm">Plazo (meses)</label>
+        <input id="plazo" type="number" placeholder="Ej: 12" class="w-full p-3 mt-1 rounded-lg border-2 border-[#FF8C00] focus:outline-none focus:border-[#007A33]">
+      </div>
+    </form>
+
+    <div class="mt-6 border-t border-gray-300 pt-4">
+      <h2 class="font-bold text-lg text-[#004d26] mb-2">Resultados del cálculo</h2>
+      <div class="flex justify-between"><span>Cuota mensual:</span><span id="cuota" class="text-[#FF8C00] font-semibold">$0.00</span></div>
+      <div class="flex justify-between"><span>Total a pagar:</span><span id="total" class="text-[#FF8C00] font-semibold">$0.00</span></div>
+      <div class="flex justify-between"><span>Intereses totales:</span><span id="intereses" class="text-[#FF8C00] font-semibold">$0.00</span></div>
+    </div>
   </div>
 
-  <div class="calculadora">
-    <h1 class="text-2xl font-bold text-center mb-4">
-      <span class="highlight">ComiOnline</span> Simulador
-    </h1>
-    <form id="calcForm" class="flex flex-col gap-3">
-      <label class="text-sm font-semibold">Monto del préstamo:</label>
-      <input type="number" id="monto" class="p-2 rounded-lg" placeholder="Ej: 1,000,000" />
-
-      <label class="text-sm font-semibold">Tasa de interés (% mensual):</label>
-      <input type="number" id="interes" class="p-2 rounded-lg" placeholder="Ej: 2" />
-
-      <label class="text-sm font-semibold">Plazo (meses):</label>
-      <input type="number" id="plazo" class="p-2 rounded-lg" placeholder="Ej: 12" />
-    </form>
-    <div id="resultado" class="mt-6 text-center">
-      <h2 class="text-lg font-bold text-green-800">Resultado:</h2>
-      <p id="cuota" class="text-xl font-semibold text-[#FF8C00]"></p>
-    </div>
+  <!-- Lado Derecho: Imagen -->
+  <div class="hidden md:block w-96">
+    <img src="https://i.ibb.co/X25rYyB/comionline-personaje.png" alt="ComiOnline" class="w-full h-auto rounded-2xl">
   </div>
 
   <script>
@@ -63,6 +52,8 @@
     const interes = document.getElementById('interes');
     const plazo = document.getElementById('plazo');
     const cuotaTxt = document.getElementById('cuota');
+    const totalTxt = document.getElementById('total');
+    const interesTxt = document.getElementById('intereses');
 
     function calcular() {
       const m = parseFloat(monto.value) || 0;
@@ -70,15 +61,3 @@
       const p = parseInt(plazo.value) || 0;
       if (m > 0 && i > 0 && p > 0) {
         const cuota = (m * i) / (1 - Math.pow(1 + i, -p));
-        cuotaTxt.textContent = `Cuota mensual: $${cuota.toFixed(2)}`;
-      } else {
-        cuotaTxt.textContent = '';
-      }
-    }
-
-    monto.addEventListener('input', calcular);
-    interes.addEventListener('input', calcular);
-    plazo.addEventListener('input', calcular);
-  </script>
-</body>
-</html>
