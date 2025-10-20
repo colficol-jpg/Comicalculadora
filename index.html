@@ -1,63 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ComiOnline - Simulador de Crédito</title>
-  <link rel="stylesheet" href="/styles.css" />
-</head>
-<body class="bg-[#004d26] text-white font-[Poppins] flex flex-col md:flex-row items-center justify-center min-h-screen p-6">
-
-  <!-- Lado Izquierdo: Contenedor principal -->
-  <div class="bg-white text-[#004d26] rounded-2xl shadow-2xl p-8 max-w-md w-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ComiOnline - Calculadora de crédito</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4222/4222260.png" />
+  </head>
+  <body class="bg-green-900 flex flex-col items-center justify-center min-h-screen text-gray-900">
     <div class="text-center mb-6">
-      <h1 class="text-3xl font-extrabold flex items-center justify-center gap-2">
-        <span class="text-[#007A33]">Comi</span><span class="text-[#FF8C00]">Online</span>
-      </h1>
-      <p class="text-sm text-gray-600">Simulador de crédito rápido y fácil</p>
+      <div class="flex items-center justify-center gap-3">
+        <div class="bg-green-600 text-white text-2xl font-bold rounded-full w-10 h-10 flex items-center justify-center">C</div>
+        <h1 class="text-white text-3xl font-bold">ComiOnline</h1>
+      </div>
+      <p class="text-gray-200 text-sm mt-2">Simulador de crédito rápido y fácil</p>
     </div>
 
-    <form id="calcForm" class="flex flex-col gap-4">
-      <div>
-        <label class="font-semibold text-sm">Monto del préstamo</label>
-        <input id="monto" type="number" placeholder="Ej: 1,000,000" class="w-full p-3 mt-1 rounded-lg border-2 border-[#FF8C00] focus:outline-none focus:border-[#007A33]">
-      </div>
+    <div class="bg-white rounded-2xl shadow-2xl p-6 w-[90%] max-w-md">
+      <label class="block font-semibold mb-1 text-gray-800">Monto del préstamo</label>
+      <input id="amount" type="number" placeholder="Ej: 1,000,000"
+        class="w-full p-2 mb-4 border rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
 
-      <div>
-        <label class="font-semibold text-sm">Tasa de interés (% mensual)</label>
-        <input id="interes" type="number" placeholder="Ej: 2" class="w-full p-3 mt-1 rounded-lg border-2 border-[#FF8C00] focus:outline-none focus:border-[#007A33]">
-      </div>
+      <label class="block font-semibold mb-1 text-gray-800">Tasa de interés (% mensual)</label>
+      <input id="interest" type="number" placeholder="Ej: 2"
+        class="w-full p-2 mb-4 border rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
 
-      <div>
-        <label class="font-semibold text-sm">Plazo (meses)</label>
-        <input id="plazo" type="number" placeholder="Ej: 12" class="w-full p-3 mt-1 rounded-lg border-2 border-[#FF8C00] focus:outline-none focus:border-[#007A33]">
-      </div>
-    </form>
+      <label class="block font-semibold mb-1 text-gray-800">Plazo (meses)</label>
+      <input id="months" type="number" placeholder="Ej: 12"
+        class="w-full p-2 mb-6 border rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
 
-    <div class="mt-6 border-t border-gray-300 pt-4">
-      <h2 class="font-bold text-lg text-[#004d26] mb-2">Resultados del cálculo</h2>
-      <div class="flex justify-between"><span>Cuota mensual:</span><span id="cuota" class="text-[#FF8C00] font-semibold">$0.00</span></div>
-      <div class="flex justify-between"><span>Total a pagar:</span><span id="total" class="text-[#FF8C00] font-semibold">$0.00</span></div>
-      <div class="flex justify-between"><span>Intereses totales:</span><span id="intereses" class="text-[#FF8C00] font-semibold">$0.00</span></div>
+      <h2 class="text-xl font-bold text-green-800 mb-3">Resultados del cálculo</h2>
+      <p>Cuota mensual: <span id="cuota" class="font-bold text-green-700">$0.00</span></p>
+      <p>Total a pagar: <span id="total" class="font-bold text-green-700">$0.00</span></p>
+      <p>Intereses totales: <span id="intereses" class="font-bold text-green-700">$0.00</span></p>
     </div>
-  </div>
 
-  <!-- Lado Derecho: Imagen -->
-  <div class="hidden md:block w-96">
-    <img src="https://i.ibb.co/X25rYyB/comionline-personaje.png" alt="ComiOnline" class="w-full h-auto rounded-2xl">
-  </div>
+    <script>
+      const format = n => n.toLocaleString("es-CO", { style: "currency", currency: "COP" });
+      const amount = document.getElementById("amount");
+      const interest = document.getElementById("interest");
+      const months = document.getElementById("months");
 
-  <script>
-    const monto = document.getElementById('monto');
-    const interes = document.getElementById('interes');
-    const plazo = document.getElementById('plazo');
-    const cuotaTxt = document.getElementById('cuota');
-    const totalTxt = document.getElementById('total');
-    const interesTxt = document.getElementById('intereses');
+      const cuota = document.getElementById("cuota");
+      const total = document.getElementById("total");
+      const intereses = document.getElementById("intereses");
 
-    function calcular() {
-      const m = parseFloat(monto.value) || 0;
-      const i = (parseFloat(interes.value) || 0) / 100;
-      const p = parseInt(plazo.value) || 0;
-      if (m > 0 && i > 0 && p > 0) {
-        const cuota = (m * i) / (1 - Math.pow(1 + i, -p));
+      function calcular() {
+        const P = parseFloat(amount.value);
+        const i = parseFloat(interest.value) / 100;
+        const n = parseInt(months.value);
+
+        if (isNaN(P) || isNaN(i) || isNaN(n) || P <= 0 || i <= 0 || n <= 0) return;
+
+        const cuotaMensual = (P * i) / (1 - Math.pow(1 + i, -n));
+        const totalPagar = cuotaMensual * n;
+        const interesTotal = totalPagar - P;
+
+        cuota.textContent = format(cuotaMensual);
+        total.textContent = format(totalPagar);
+        intereses.textContent = format(interesTotal);
+      }
+
+      amount.addEventListener("input", calcular);
+      interest.addEventListener("input", calcular);
+      months.addEventListener("input", calcular);
+    </script>
+  </body>
+</html>
