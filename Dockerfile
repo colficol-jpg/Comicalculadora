@@ -1,17 +1,23 @@
-# Etapa 1: construir CSS con Tailwind
-FROM node:18-alpine AS builder
+# Usa una imagen ligera de Node.js
+FROM node:18-alpine
+
+# Establece el directorio de trabajo
 WORKDIR /app
 
+# Copia los archivos de configuración primero (para aprovechar la cache)
 COPY package*.json ./
+
+# Instala dependencias de producción y desarrollo (Tailwind incluido)
 RUN npm install
 
+# Copia todo el proyecto
 COPY . .
-RUN npm run build:css
 
-# Etapa 2: ejecutar la app
-FROM node:18-alpine
-WORKDIR /app
+# Compila Tailwind CSS antes de iniciar el servidor
+RUN npx tailwindcss -i ./input.css -o ./public/styles.css
 
-COPY --from=builder /app /app
+# Expone el puerto 8080 para Zeabur
 EXPOSE 8080
+
+# Comando para ejecutar el servidor
 CMD ["npm", "start"]
