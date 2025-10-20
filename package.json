@@ -1,11 +1,18 @@
 {
-  "name": "comionline-calculator",
+  "name": "comycalculator",
   "version": "1.0.0",
-  "main": "src/backend/server.js",
+  "description": "ComiOnline - Calculadora de Crédito",
+  "main": "server.js",
   "scripts": {
-    "start": "node src/backend/server.js"
+    "build:css": "tailwindcss -i ./input.css -o ./public/styles.css",
+    "build:css:watch": "tailwindcss -i ./input.css -o ./public/styles.css --watch",
+    "start": "node server.js",
+    "dev": "npm run build:css:watch & node server.js"
   },
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.0"
   }
 }
