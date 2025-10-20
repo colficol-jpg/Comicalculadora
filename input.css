@@ -2,31 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fondo degradado institucional ComiOnline */
 body {
+  @apply min-h-screen flex flex-col items-center justify-center;
   background: linear-gradient(135deg, #004d26, #007A33);
   color: white;
   font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
+/* Caja principal de la calculadora */
 .calculadora {
-  background: white;
-  color: #004d26;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  padding: 2rem;
-  max-width: 420px;
-  width: 100%;
+  @apply rounded-2xl shadow-2xl p-6 w-full max-w-md text-gray-800;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.calculadora:hover {
+  transform: scale(1.01);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+}
+
+/* Texto destacado (como el logo o encabezados) */
 .highlight {
   color: #FF8C00;
 }
 
+/* Campos de entrada */
 input {
+  width: 100%;
   border: 2px solid #FF8C00;
+  border-radius: 0.5rem;
+  padding: 0.6rem;
   outline: none;
+  color: #004d26;
+  font-size: 1rem;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input::placeholder {
+  color: #888;
 }
 
 input:focus {
   border-color: #007A33;
+  box-shadow: 0 0 6px rgba(0, 122, 51, 0.3);
+}
+
+/* Botón de calcular (si lo agregamos luego) */
+button {
+  background-color: #FF8C00;
+  color: white;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  transition: all 0.2s ease;
+  width: 100%;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+button:hover {
+  background-color: #ff7300;
+  transform: scale(1.02);
+}
+
+/* Etiquetas y resultados */
+label {
+  font-weight: 600;
+  color: #004d26;
+}
+
+.resultados {
+  @apply text-left mt-4;
+}
+
+.resultados span {
+  color: #007A33;
+  font-weight: 700;
 }
