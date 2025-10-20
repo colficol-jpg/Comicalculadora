@@ -1,23 +1,18 @@
-# Usa una imagen ligera de Node.js
+# Usar una imagen ligera de Node
 FROM node:18-alpine
 
-# Establece el directorio de trabajo
+# Crear directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos de configuración primero (para aprovechar la cache)
+# Copiar archivos
 COPY package*.json ./
-
-# Instala dependencias de producción y desarrollo (Tailwind incluido)
 RUN npm install
 
-# Copia todo el proyecto
+# Copiar el resto del código
 COPY . .
 
-# Compila Tailwind CSS antes de iniciar el servidor
-RUN npx tailwindcss -i ./input.css -o ./public/styles.css
+# Exponer el puerto
+EXPOSE 3000
 
-# Expone el puerto 8080 para Zeabur
-EXPOSE 8080
-
-# Comando para ejecutar el servidor
+# Comando de inicio
 CMD ["npm", "start"]
